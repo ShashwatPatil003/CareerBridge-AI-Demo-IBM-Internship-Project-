@@ -1,9 +1,21 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>
+:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}
+img{max-width:100%}
+[hidden]:not([hidden=until-found i]){display:none!important}
+</style>
+</head>
+<body>
 <title>CareerBridge AI Demo</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky top nav; five pages (home, app, college, impact, about); the app page has a left tab rail and a content pane. */
 :root{
   --bg:#FCFAFB; --surface:#FFFFFF; --soft:#F6EEF1; --line:#E6D9DE;
   --fg:#1F1A24; --muted:#6B6475; --accent:#A21942; --on-accent:#FFFFFF; --accent-soft:#F3DCE4;
@@ -179,7 +191,6 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:v
 </div>
 
 <script>
-/* ---------- data ---------- */
 const CITIES=["Nashik","Nagpur","Indore","Kolhapur","Hubballi","Coimbatore","Jaipur","Bhubaneswar","Surat","Vadodara","Mysuru","Raipur"];
 const SK={
  "Python":{c:"Tech",h:"Variables, loops, lists, functions and files.",p:"Solve 15 small problems from a worksheet.",m:"Write a script that cleans a CSV and prints a summary."},
@@ -242,7 +253,6 @@ const MSG={
 };
 const TIMES=["8:00 AM","12:30 PM","6:00 PM","Sun 5:00 PM"];
 
-/* ---------- state ---------- */
 const DEF={name:"Shashwat",city:"Nashik",edu:EDU[0],skills:["Python","SQL","Excel","Communication"],lang:"en",target:"",summary:"",projects:"",done:{},interviews:[],mode:"All",track:"All",qi:0};
 let S=JSON.parse(JSON.stringify(DEF));
 try{const raw=localStorage.getItem("cb_state");if(raw)S={...S,...JSON.parse(raw)}}catch(e){}
@@ -252,7 +262,6 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let chat=[],ai={sample:null,dl:null,ready:false};
 
-/* ---------- engine ---------- */
 function scoreJob(j,skills=S.skills){
   const hr=j.req.filter(s=>skills.includes(s)).length,hn=j.nice.filter(s=>skills.includes(s)).length;
   return Math.round(100*(2*hr+hn)/(2*j.req.length+j.nice.length));
@@ -298,7 +307,6 @@ function resumeText(j){
     pr.length?"PROJECTS\n"+pr.map(x=>"- "+x).join("\n")+"\n":"PROJECTS\n- Add one project you finished (what you built and the result)\n","TARGET ROLE",`${j.t} (${j.mode})`].join("\n");
 }
 
-/* ---------- AI (sample capability) ---------- */
 async function initAI(){
   try{
     if(window.claude&&window.claude.use){
@@ -321,7 +329,6 @@ function ctxText(){
   return `Candidate: ${S.edu} in ${S.city}. Skills: ${S.skills.join(", ")||"none yet"}. Sample matches: ${r}.`;
 }
 
-/* ---------- small renderers ---------- */
 function ring(pct,size=84){
   const R=34,C=2*Math.PI*R;
   return `<svg viewBox="0 0 80 80" width="${size}" height="${size}" role="img" aria-label="${pct} percent"><circle cx="40" cy="40" r="${R}" fill="none" style="stroke:var(--soft)" stroke-width="8"/><circle cx="40" cy="40" r="${R}" fill="none" style="stroke:var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct/100)}" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle" font-size="19" font-family="IBM Plex Mono,monospace" style="fill:var(--fg)">${pct}</text></svg>`;
@@ -337,7 +344,6 @@ function radar(j,skills=S.skills){
 }
 const hbar=(label,val,max,suffix="")=>`<div class="hbar"><span>${esc(label)}</span><span class="t"><i style="width:${Math.max(2,100*val/max)}%"></i></span><span class="v">${val}${suffix}</span></div>`;
 
-/* ---------- pages ---------- */
 const PAGES=[["home","Home"],["app","Try it"],["college","College view"],["impact","Impact"],["about","About"]];
 function pageHome(){
   const top=rank()[0];
@@ -427,7 +433,7 @@ function tMatches(){
   <section class="panel"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h3>Best-fit jobs near ${esc(S.city)}</h3><span class="small muted">${list.length} found · sample roles</span></div>
     <div class="row" style="margin-bottom:6px">${["All","Remote","Hybrid","On-site"].map(m=>`<button class="chip" data-act="fmode" data-v="${m}" aria-pressed="${S.mode===m}">${m}</button>`).join("")}</div>
     <div class="row" style="margin-bottom:14px">${["All","Tech","Business","Industrial","Service"].map(m=>`<button class="chip" data-act="ftrack" data-v="${m}" aria-pressed="${S.track===m}">${m}</button>`).join("")}</div>
-    ${list.slice(0,8).map(x=>`<div class="job"><div><h3>${esc(x.t)} ${x.id===j.id?'<span class="tgt">TARGET</span>':""}</h3><div class="small muted">${x.mode}${x.mode==="Remote"?"":" in "+esc(S.city)} · ${x.track}</div></div><div class="score">${x.score}%</div>
+    ${list.slice(0,8).map(x=>`<div class="job"><div><h3>${esc(x.t)}${x.id===j.id?'<span class="tgt">TARGET</span>':""}</h3><div class="small muted">${x.mode}${x.mode==="Remote"?"":" in "+esc(S.city)} · ${x.track}</div></div><div class="score">${x.score}%</div>
       <div class="bar" role="img" aria-label="${x.score} percent match"><i style="width:${x.score}%"></i></div>
       <div class="skills">${x.haveR.map(s=>`<span class="s have">${esc(s)}</span>`).join("")}${x.gapR.map(s=>`<span class="s gap">Gap: ${esc(s)}</span>`).join("")}${x.haveN.map(s=>`<span class="s have">${esc(s)}</span>`).join("")}${x.gapN.map(s=>`<span class="s opt">Bonus: ${esc(s)}</span>`).join("")}
       ${x.id!==j.id?`<button class="btn sm ghost" style="margin-left:auto" data-act="target" data-v="${x.id}">Make target</button>`:""}</div></div>`).join("")||`<p class="muted">No roles match these filters in ${esc(S.city)}. Try All.</p>`}
@@ -485,7 +491,6 @@ function tAsk(){
     <div class="row" style="margin-top:12px;flex-wrap:nowrap"><label for="askin" class="small" style="position:absolute;left:-9999px">Your question</label><input type="text" id="askin" placeholder="Type your question"><button class="btn" id="askBtn" data-act="ask">Send</button></div></section>`;
 }
 
-/* college */
 function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const BRANCH={Computer:["Python","SQL","Excel","JavaScript","HTML and CSS","Git","Communication","Problem solving"],Electrical:["Electrical wiring","PLC basics","AutoCAD","Teamwork","Communication","Machine maintenance"],Mechanical:["AutoCAD","Welding basics","Machine maintenance","Teamwork","Problem solving","Excel"],Commerce:["Excel","Tally","Data entry","Communication","Sales","English typing","Digital marketing"]};
 let COHORT=null,cf="All",showAll=false;
@@ -519,7 +524,7 @@ function pageCollege(){
     <section class="panel"><h3>Most common core skill gaps</h3><p class="muted small" style="margin-bottom:8px">Students missing each skill for their best-fit role.</p>${gl.length?gl.map(g=>hbar(g[0],g[1],gl[0][1])).join(""):"<p class='muted'>No gaps.</p>"}</section></div>
   <section class="panel" style="background:var(--accent-soft)"><h3>Suggested action</h3><p style="margin-top:6px">${esc(rec)}</p></section>
   <section class="panel"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h3>Cohort</h3><button class="btn sm ghost" data-act="showall">${showAll?"Show top 10":"Show all "+rows.length}</button></div>
-    <div class="tablewrap"><table><thead><tr><th>ID</th><th>Branch</th><th>City</th><th>Best-fit role</th><th>Match</th><th>Main gap</th></tr></thead><tbody>${(showAll?rows:rows.slice(0,10)).map(x=>`<tr><td class="mono">${x.id}</td><td>${x.b}</td><td>${x.city}</td><td>${esc(x.best.t)}</td><td class="mono">${x.best.score}%</td><td>${esc(x.best.gapR[0]||"None")}</td></tr>`).join("")}</tbody></table></div></section></div>`;
+    <div class="tablewrap"><table><thead><tr><th>ID</th><th>Branch</th><th>City</th><th>Best-fit role</th><th>Match</th><th>Main gap</th></tr></thead><tbody>${(showAll?rows:rows.slice(0,10)).map(x=>`<tr><td class="mono">${x.id}</td><td>${x.b}</td><td>${x.city}</td><td>${esc(x.best.t)}</td><td class="mono">${x.best.score}\%</td><td>${esc(x.best.gapR[0]||"None")}</td></tr>`).join("")}</tbody></table></div></section></div>`;
 }
 
 function pageImpact(){
@@ -562,7 +567,6 @@ function pageAbout(){
   <section class="panel"><h3>Roadmap</h3><div class="cols3" style="margin-top:12px">${[["Phase 1: Pilot","WhatsApp bot with Profiler and Matcher in three colleges."],["Phase 2: Grow","Add Coach and Alert agents, onboard employers and skilling partners."],["Phase 3: Prove impact","Track placements and publish SDG 8 outcomes."]].map(p=>`<div class="agentcard"><h3>${p[0]}</h3><p class="muted small" style="margin-top:4px">${p[1]}</p></div>`).join("")}</div></section></div>`;
 }
 
-/* ---------- router ---------- */
 let page="home",tab="profile";
 function route(){
   const [p,t]=(location.hash||"#home").slice(1).split("-");
@@ -583,7 +587,6 @@ function refreshHead(){
   if(s)s.textContent="Target role: "+j.t+" · "+S.city;
 }
 
-/* ---------- actions ---------- */
 document.addEventListener("click",e=>{
   const el=e.target.closest("[data-act]");if(!el)return;
   const a=el.dataset.act,v=el.dataset.v;
@@ -667,7 +670,7 @@ async function doAsk(){
   }
   if(!ans){
     const j=target(),g=gaps(j)[0],u=unlocks()[0];
-    ans=(err?err+"\n\n":"")+`Based on your profile: your best sample match is ${j.t} at ${j.score}%. ${g?`Start with ${g}: ${SK[g].h}`:"You have the listed skills, so focus on a project and mock interviews."}${u?` Learning ${u.s} would unlock ${u.n} more strong matches.`:""}`;
+    ans=(err?err+"\n\n":"")+`Based on your profile: your best sample match is ${j.t} at ${j.score}%. ${g?`Start with ${g}:${SK[g].h}`:"You have the listed skills, so focus on a project and mock interviews."}${u?` Learning ${u.s} would unlock${u.n} more strong matches.`:""}`;
   }
   out.textContent=ans;chat.push({r:"ai",c:ans});btn.disabled=false;log.scrollTop=log.scrollHeight;
 }
@@ -678,4 +681,5 @@ $("page").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="aski
 route();initAI();
 </script>
 
-</body></html>
+</body>
+</html>
